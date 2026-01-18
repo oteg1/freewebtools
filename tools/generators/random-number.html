@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Number Generator - Free Number Picker Online</title>
+  <meta name="description" content="Free random number generator. Generate random numbers within a range, pick lottery numbers, roll dice, and more.">
+  <meta name="keywords" content="random number generator, random picker, lottery number generator, dice roller, number randomizer">
+  <link rel="canonical" href="https://freetoolbox.com/tools/generators/random-number.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Generators</a> &rsaquo; Random Number Generator
+      </div>
+
+      <div class="tool-header">
+        <h1>Random Number Generator</h1>
+        <p>Generate random numbers for games, lotteries, or any other purpose. Uses cryptographically secure randomness.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <h3 style="margin-bottom: 16px;">Generate Number in Range</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="input-group">
+            <label for="min">Minimum</label>
+            <input type="number" id="min" value="1">
+          </div>
+          <div class="input-group">
+            <label for="max">Maximum</label>
+            <input type="number" id="max" value="100">
+          </div>
+        </div>
+
+        <button class="btn" onclick="generateRange()" style="width: 100%; margin-top: 16px;">Generate</button>
+
+        <div class="result-box" style="margin-top: 20px; text-align: center;">
+          <div id="result" style="font-size: 3rem; font-weight: bold; color: var(--primary);">?</div>
+        </div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Generate Multiple Numbers</h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+          <div class="input-group">
+            <label for="multi-min">Min</label>
+            <input type="number" id="multi-min" value="1">
+          </div>
+          <div class="input-group">
+            <label for="multi-max">Max</label>
+            <input type="number" id="multi-max" value="50">
+          </div>
+          <div class="input-group">
+            <label for="multi-count">Count</label>
+            <input type="number" id="multi-count" value="6" min="1" max="100">
+          </div>
+        </div>
+
+        <div class="checkbox-group" style="margin-top: 12px;">
+          <label>
+            <input type="checkbox" id="unique" checked>
+            Unique numbers only (no repeats)
+          </label>
+          <label>
+            <input type="checkbox" id="sorted">
+            Sort results
+          </label>
+        </div>
+
+        <button class="btn" onclick="generateMultiple()" style="width: 100%; margin-top: 16px;">Generate Numbers</button>
+
+        <div class="result-box" style="margin-top: 20px; text-align: center;">
+          <div id="multi-result" style="font-size: 1.5rem; font-weight: bold;"></div>
+        </div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Quick Tools</h3>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">
+          <div style="text-align: center;">
+            <button class="btn btn-secondary" onclick="rollDice()" style="width: 100%;">Roll Dice (1-6)</button>
+            <div id="dice-result" style="font-size: 2rem; margin-top: 8px;"></div>
+          </div>
+          <div style="text-align: center;">
+            <button class="btn btn-secondary" onclick="flipCoin()" style="width: 100%;">Flip Coin</button>
+            <div id="coin-result" style="font-size: 1.5rem; margin-top: 8px;"></div>
+          </div>
+          <div style="text-align: center;">
+            <button class="btn btn-secondary" onclick="pick1to10()" style="width: 100%;">Pick 1-10</button>
+            <div id="1to10-result" style="font-size: 2rem; margin-top: 8px;"></div>
+          </div>
+          <div style="text-align: center;">
+            <button class="btn btn-secondary" onclick="pick1to100()" style="width: 100%;">Pick 1-100</button>
+            <div id="1to100-result" style="font-size: 2rem; margin-top: 8px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function secureRandom(min, max) {
+      const range = max - min + 1;
+      const bytesNeeded = Math.ceil(Math.log2(range) / 8);
+      const maxValid = Math.floor(256 ** bytesNeeded / range) * range - 1;
+
+      let randomValue;
+      do {
+        const randomBytes = crypto.getRandomValues(new Uint8Array(bytesNeeded));
+        randomValue = randomBytes.reduce((acc, byte, i) => acc + byte * (256 ** i), 0);
+      } while (randomValue > maxValid);
+
+      return min + (randomValue % range);
+    }
+
+    function generateRange() {
+      const min = parseInt(document.getElementById('min').value);
+      const max = parseInt(document.getElementById('max').value);
+
+      if (isNaN(min) || isNaN(max) || min > max) {
+        document.getElementById('result').textContent = 'Invalid range';
+        return;
+      }
+
+      const result = secureRandom(min, max);
+      document.getElementById('result').textContent = result;
+    }
+
+    function generateMultiple() {
+      const min = parseInt(document.getElementById('multi-min').value);
+      const max = parseInt(document.getElementById('multi-max').value);
+      const count = parseInt(document.getElementById('multi-count').value);
+      const unique = document.getElementById('unique').checked;
+      const sorted = document.getElementById('sorted').checked;
+
+      if (isNaN(min) || isNaN(max) || isNaN(count) || min > max) {
+        document.getElementById('multi-result').textContent = 'Invalid input';
+        return;
+      }
+
+      if (unique && count > (max - min + 1)) {
+        document.getElementById('multi-result').textContent = 'Not enough unique numbers in range';
+        return;
+      }
+
+      let numbers = [];
+
+      if (unique) {
+        const pool = [];
+        for (let i = min; i <= max; i++) pool.push(i);
+
+        for (let i = 0; i < count; i++) {
+          const idx = secureRandom(0, pool.length - 1);
+          numbers.push(pool.splice(idx, 1)[0]);
+        }
+      } else {
+        for (let i = 0; i < count; i++) {
+          numbers.push(secureRandom(min, max));
+        }
+      }
+
+      if (sorted) numbers.sort((a, b) => a - b);
+
+      document.getElementById('multi-result').textContent = numbers.join('  ');
+    }
+
+    function rollDice() {
+      document.getElementById('dice-result').textContent = secureRandom(1, 6);
+    }
+
+    function flipCoin() {
+      document.getElementById('coin-result').textContent = secureRandom(0, 1) === 0 ? 'Heads' : 'Tails';
+    }
+
+    function pick1to10() {
+      document.getElementById('1to10-result').textContent = secureRandom(1, 10);
+    }
+
+    function pick1to100() {
+      document.getElementById('1to100-result').textContent = secureRandom(1, 100);
+    }
+  </script>
+</body>
+</html>

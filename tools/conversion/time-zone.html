@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Zone Converter - World Time Zone Calculator</title>
+  <meta name="description" content="Free time zone converter. Convert times between different time zones around the world. See current time in major cities.">
+  <meta name="keywords" content="time zone converter, world clock, time converter, timezone calculator, international time">
+  <link rel="canonical" href="https://freetoolbox.com/tools/conversion/time-zone.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Conversion Tools</a> &rsaquo; Time Zone Converter
+      </div>
+
+      <div class="tool-header">
+        <h1>Time Zone Converter</h1>
+        <p>Convert times between different time zones around the world.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="input-group">
+            <label for="from-time">Time</label>
+            <input type="time" id="from-time" value="12:00">
+          </div>
+          <div class="input-group">
+            <label for="from-date">Date</label>
+            <input type="date" id="from-date">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: end; margin-top: 20px;">
+          <div class="input-group">
+            <label for="from-zone">From Time Zone</label>
+            <select id="from-zone"></select>
+          </div>
+
+          <button class="swap-btn" onclick="swapZones()" title="Swap zones" style="margin-bottom: 8px;">
+            &#8644;
+          </button>
+
+          <div class="input-group">
+            <label for="to-zone">To Time Zone</label>
+            <select id="to-zone"></select>
+          </div>
+        </div>
+
+        <button class="btn" onclick="convert()" style="width: 100%; margin-top: 20px;">Convert</button>
+
+        <div class="result-box" style="margin-top: 24px; text-align: center;">
+          <div id="result" style="font-size: 1.5rem; font-weight: bold;"></div>
+          <div id="result-date" style="color: var(--text-muted); margin-top: 8px;"></div>
+        </div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3>Current Time in Major Cities</h3>
+        <div id="world-clocks" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px;">
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const timeZones = [
+      { name: 'UTC', offset: 0, label: 'UTC (Coordinated Universal Time)' },
+      { name: 'America/New_York', offset: -5, label: 'New York (EST/EDT)' },
+      { name: 'America/Chicago', offset: -6, label: 'Chicago (CST/CDT)' },
+      { name: 'America/Denver', offset: -7, label: 'Denver (MST/MDT)' },
+      { name: 'America/Los_Angeles', offset: -8, label: 'Los Angeles (PST/PDT)' },
+      { name: 'America/Sao_Paulo', offset: -3, label: 'Sao Paulo (BRT)' },
+      { name: 'Europe/London', offset: 0, label: 'London (GMT/BST)' },
+      { name: 'Europe/Paris', offset: 1, label: 'Paris (CET/CEST)' },
+      { name: 'Europe/Berlin', offset: 1, label: 'Berlin (CET/CEST)' },
+      { name: 'Europe/Moscow', offset: 3, label: 'Moscow (MSK)' },
+      { name: 'Asia/Dubai', offset: 4, label: 'Dubai (GST)' },
+      { name: 'Asia/Kolkata', offset: 5.5, label: 'Mumbai/Delhi (IST)' },
+      { name: 'Asia/Singapore', offset: 8, label: 'Singapore (SGT)' },
+      { name: 'Asia/Hong_Kong', offset: 8, label: 'Hong Kong (HKT)' },
+      { name: 'Asia/Tokyo', offset: 9, label: 'Tokyo (JST)' },
+      { name: 'Australia/Sydney', offset: 11, label: 'Sydney (AEDT)' },
+      { name: 'Pacific/Auckland', offset: 13, label: 'Auckland (NZDT)' }
+    ];
+
+    const majorCities = [
+      { city: 'New York', tz: 'America/New_York' },
+      { city: 'London', tz: 'Europe/London' },
+      { city: 'Paris', tz: 'Europe/Paris' },
+      { city: 'Tokyo', tz: 'Asia/Tokyo' },
+      { city: 'Sydney', tz: 'Australia/Sydney' },
+      { city: 'Dubai', tz: 'Asia/Dubai' }
+    ];
+
+    function init() {
+      const fromSelect = document.getElementById('from-zone');
+      const toSelect = document.getElementById('to-zone');
+
+      timeZones.forEach((tz, i) => {
+        fromSelect.innerHTML += `<option value="${tz.name}">${tz.label}</option>`;
+        toSelect.innerHTML += `<option value="${tz.name}" ${i === 4 ? 'selected' : ''}>${tz.label}</option>`;
+      });
+
+      // Set default date to today
+      document.getElementById('from-date').valueAsDate = new Date();
+
+      // Try to detect user's timezone
+      const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const found = timeZones.find(tz => tz.name === userTz);
+      if (found) {
+        fromSelect.value = userTz;
+      }
+
+      updateWorldClocks();
+      setInterval(updateWorldClocks, 1000);
+    }
+
+    function convert() {
+      const time = document.getElementById('from-time').value;
+      const date = document.getElementById('from-date').value;
+      const fromZone = document.getElementById('from-zone').value;
+      const toZone = document.getElementById('to-zone').value;
+
+      if (!time || !date) return;
+
+      const dateTimeStr = `${date}T${time}:00`;
+
+      try {
+        // Create date in source timezone
+        const sourceDate = new Date(dateTimeStr);
+
+        // Format in target timezone
+        const options = {
+          timeZone: toZone,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        };
+        const dateOptions = {
+          timeZone: toZone,
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        };
+
+        const convertedTime = sourceDate.toLocaleTimeString('en-US', options);
+        const convertedDate = sourceDate.toLocaleDateString('en-US', dateOptions);
+
+        document.getElementById('result').textContent = convertedTime;
+        document.getElementById('result-date').textContent = convertedDate;
+      } catch (e) {
+        document.getElementById('result').textContent = 'Invalid timezone';
+      }
+    }
+
+    function swapZones() {
+      const from = document.getElementById('from-zone');
+      const to = document.getElementById('to-zone');
+      const temp = from.value;
+      from.value = to.value;
+      to.value = temp;
+      convert();
+    }
+
+    function updateWorldClocks() {
+      const container = document.getElementById('world-clocks');
+      container.innerHTML = '';
+
+      majorCities.forEach(({ city, tz }) => {
+        const now = new Date();
+        const time = now.toLocaleTimeString('en-US', {
+          timeZone: tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+
+        container.innerHTML += `
+          <div style="background: #f1f5f9; padding: 16px; border-radius: 8px; text-align: center;">
+            <div style="font-weight: 600; margin-bottom: 4px;">${city}</div>
+            <div style="font-size: 1.2rem; font-family: monospace;">${time}</div>
+          </div>
+        `;
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

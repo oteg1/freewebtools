@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encoder/Decoder - Free Online Tool</title>
+  <meta name="description" content="Free online Base64 encoder and decoder. Convert text to Base64 and decode Base64 strings instantly. Supports UTF-8 encoding.">
+  <meta name="keywords" content="base64 encoder, base64 decoder, encode base64, decode base64, base64 converter">
+  <link rel="canonical" href="https://freetoolbox.com/tools/dev/base64.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Developer Tools</a> &rsaquo; Base64 Encoder/Decoder
+      </div>
+
+      <div class="tool-header">
+        <h1>Base64 Encoder/Decoder</h1>
+        <p>Encode text to Base64 or decode Base64 strings back to readable text. Supports UTF-8 characters.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="input-text">Input:</label>
+          <textarea id="input-text" placeholder="Enter text to encode or Base64 to decode..."></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn" onclick="encode()">Encode to Base64</button>
+          <button class="btn" onclick="decode()">Decode from Base64</button>
+          <button class="btn btn-secondary" onclick="swap()">Swap Input/Output</button>
+          <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+        </div>
+
+        <div id="status" style="margin-top: 16px; font-weight: 600;"></div>
+
+        <div class="result-box" style="margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="result-label">Output:</div>
+            <button class="btn copy-btn" onclick="copyResult()">Copy</button>
+          </div>
+          <div id="output" style="min-height: 50px; word-break: break-all;"></div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>What is Base64?</h2>
+        <p>Base64 is a binary-to-text encoding scheme that represents binary data in ASCII string format. It's commonly used for:</p>
+        <ul style="margin: 16px 0; padding-left: 20px;">
+          <li>Embedding images in HTML/CSS</li>
+          <li>Sending binary data over text-only protocols</li>
+          <li>Encoding data in URLs and APIs</li>
+          <li>Email attachments (MIME)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function encode() {
+      const input = document.getElementById('input-text').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        // Handle UTF-8 characters
+        const encoded = btoa(unescape(encodeURIComponent(input)));
+        output.textContent = encoded;
+        status.innerHTML = '<span style="color: #28a745;">Encoded successfully!</span>';
+      } catch (e) {
+        output.textContent = '';
+        status.innerHTML = `<span style="color: #dc3545;">Error: ${e.message}</span>`;
+      }
+    }
+
+    function decode() {
+      const input = document.getElementById('input-text').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        // Handle UTF-8 characters
+        const decoded = decodeURIComponent(escape(atob(input)));
+        output.textContent = decoded;
+        status.innerHTML = '<span style="color: #28a745;">Decoded successfully!</span>';
+      } catch (e) {
+        output.textContent = '';
+        status.innerHTML = '<span style="color: #dc3545;">Invalid Base64 string</span>';
+      }
+    }
+
+    function swap() {
+      const input = document.getElementById('input-text');
+      const output = document.getElementById('output');
+      const temp = input.value;
+      input.value = output.textContent;
+      output.textContent = temp;
+    }
+
+    function copyResult() {
+      const output = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(output);
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function clearAll() {
+      document.getElementById('input-text').value = '';
+      document.getElementById('output').textContent = '';
+      document.getElementById('status').textContent = '';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Encoder/Decoder - Free Online Tool</title>
+  <meta name="description" content="Free online URL encoder and decoder. Encode special characters for URLs or decode percent-encoded strings instantly.">
+  <meta name="keywords" content="url encoder, url decoder, percent encoding, encode url, decode url, uri encoder">
+  <link rel="canonical" href="https://freetoolbox.com/tools/dev/url-encoder.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Developer Tools</a> &rsaquo; URL Encoder/Decoder
+      </div>
+
+      <div class="tool-header">
+        <h1>URL Encoder/Decoder</h1>
+        <p>Encode special characters for use in URLs or decode percent-encoded strings back to readable text.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="input-text">Input:</label>
+          <textarea id="input-text" placeholder="Enter text or URL to encode/decode..."></textarea>
+        </div>
+
+        <div class="checkbox-group">
+          <label>
+            <input type="radio" name="mode" value="component" checked>
+            encodeURIComponent (encode everything except A-Z a-z 0-9 - _ . ~ )
+          </label>
+          <label>
+            <input type="radio" name="mode" value="uri">
+            encodeURI (preserve URL structure like :// and /)
+          </label>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn" onclick="encode()">Encode</button>
+          <button class="btn" onclick="decode()">Decode</button>
+          <button class="btn btn-secondary" onclick="swap()">Swap</button>
+          <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+        </div>
+
+        <div id="status" style="margin-top: 16px; font-weight: 600;"></div>
+
+        <div class="result-box" style="margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="result-label">Output:</div>
+            <button class="btn copy-btn" onclick="copyResult()">Copy</button>
+          </div>
+          <div id="output" style="min-height: 50px; word-break: break-all;"></div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>Common Encoded Characters</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 16px;">
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">Space = %20</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;"># = %23</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">& = %26</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">? = %3F</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">= = %3D</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">+ = %2B</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">/ = %2F</div>
+          <div style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-family: monospace;">@ = %40</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function getMode() {
+      return document.querySelector('input[name="mode"]:checked').value;
+    }
+
+    function encode() {
+      const input = document.getElementById('input-text').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        const mode = getMode();
+        const encoded = mode === 'component' ? encodeURIComponent(input) : encodeURI(input);
+        output.textContent = encoded;
+        status.innerHTML = '<span style="color: #28a745;">Encoded successfully!</span>';
+      } catch (e) {
+        output.textContent = '';
+        status.innerHTML = `<span style="color: #dc3545;">Error: ${e.message}</span>`;
+      }
+    }
+
+    function decode() {
+      const input = document.getElementById('input-text').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        const mode = getMode();
+        const decoded = mode === 'component' ? decodeURIComponent(input) : decodeURI(input);
+        output.textContent = decoded;
+        status.innerHTML = '<span style="color: #28a745;">Decoded successfully!</span>';
+      } catch (e) {
+        output.textContent = '';
+        status.innerHTML = '<span style="color: #dc3545;">Invalid encoded string</span>';
+      }
+    }
+
+    function swap() {
+      const input = document.getElementById('input-text');
+      const output = document.getElementById('output');
+      const temp = input.value;
+      input.value = output.textContent;
+      output.textContent = temp;
+    }
+
+    function copyResult() {
+      const output = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(output);
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function clearAll() {
+      document.getElementById('input-text').value = '';
+      document.getElementById('output').textContent = '';
+      document.getElementById('status').textContent = '';
+    }
+  </script>
+</body>
+</html>

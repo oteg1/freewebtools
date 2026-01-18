@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator - Free Body Mass Index Calculator</title>
+  <meta name="description" content="Free BMI calculator. Calculate your Body Mass Index using height and weight. Supports both metric and imperial units.">
+  <meta name="keywords" content="bmi calculator, body mass index, calculate bmi, weight calculator, health calculator">
+  <link rel="canonical" href="https://freetoolbox.com/tools/math/bmi-calculator.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Math Tools</a> &rsaquo; BMI Calculator
+      </div>
+
+      <div class="tool-header">
+        <h1>BMI Calculator</h1>
+        <p>Calculate your Body Mass Index to understand your weight relative to your height.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="checkbox-group" style="margin-bottom: 20px;">
+          <label>
+            <input type="radio" name="unit" value="metric" checked onchange="toggleUnits()">
+            Metric (kg, cm)
+          </label>
+          <label>
+            <input type="radio" name="unit" value="imperial" onchange="toggleUnits()">
+            Imperial (lbs, ft/in)
+          </label>
+        </div>
+
+        <div id="metric-inputs">
+          <div class="input-group">
+            <label for="weight-kg">Weight (kg)</label>
+            <input type="number" id="weight-kg" placeholder="70" min="1">
+          </div>
+          <div class="input-group">
+            <label for="height-cm">Height (cm)</label>
+            <input type="number" id="height-cm" placeholder="170" min="1">
+          </div>
+        </div>
+
+        <div id="imperial-inputs" style="display: none;">
+          <div class="input-group">
+            <label for="weight-lbs">Weight (lbs)</label>
+            <input type="number" id="weight-lbs" placeholder="154" min="1">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="input-group">
+              <label for="height-ft">Height (feet)</label>
+              <input type="number" id="height-ft" placeholder="5" min="1">
+            </div>
+            <div class="input-group">
+              <label for="height-in">Height (inches)</label>
+              <input type="number" id="height-in" placeholder="7" min="0" max="11">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" onclick="calculate()" style="width: 100%;">Calculate BMI</button>
+
+        <div id="results" style="display: none;">
+          <div class="stats-grid" style="margin-top: 30px;">
+            <div class="stat-item" style="grid-column: span 2;">
+              <div class="stat-value" id="bmi-value">0</div>
+              <div class="stat-label" id="bmi-category">BMI</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px;">
+            <div style="background: linear-gradient(to right, #3b82f6, #22c55e, #eab308, #ef4444); height: 24px; border-radius: 12px; position: relative;">
+              <div id="bmi-marker" style="position: absolute; top: -8px; width: 4px; height: 40px; background: #1e293b; border-radius: 2px; transform: translateX(-50%);"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.85rem; color: var(--text-muted);">
+              <span>Underweight<br>&lt;18.5</span>
+              <span>Normal<br>18.5-24.9</span>
+              <span>Overweight<br>25-29.9</span>
+              <span>Obese<br>30+</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>BMI Categories</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+          <tr style="background: #f1f5f9;">
+            <th style="padding: 12px; text-align: left;">Category</th>
+            <th style="padding: 12px; text-align: left;">BMI Range</th>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Underweight</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Less than 18.5</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Normal weight</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">18.5 - 24.9</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Overweight</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">25 - 29.9</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px;">Obese</td>
+            <td style="padding: 12px;">30 or greater</td>
+          </tr>
+        </table>
+        <p style="margin-top: 16px; padding: 12px; background: #fff3cd; border-radius: 8px;">
+          <strong>Note:</strong> BMI is a general indicator and doesn't account for muscle mass, bone density, or overall body composition. Consult a healthcare provider for personalized advice.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleUnits() {
+      const isMetric = document.querySelector('input[name="unit"]:checked').value === 'metric';
+      document.getElementById('metric-inputs').style.display = isMetric ? 'block' : 'none';
+      document.getElementById('imperial-inputs').style.display = isMetric ? 'none' : 'block';
+    }
+
+    function calculate() {
+      const isMetric = document.querySelector('input[name="unit"]:checked').value === 'metric';
+      let bmi;
+
+      if (isMetric) {
+        const weight = parseFloat(document.getElementById('weight-kg').value);
+        const height = parseFloat(document.getElementById('height-cm').value) / 100;
+        if (isNaN(weight) || isNaN(height) || height === 0) return;
+        bmi = weight / (height * height);
+      } else {
+        const weight = parseFloat(document.getElementById('weight-lbs').value);
+        const feet = parseFloat(document.getElementById('height-ft').value) || 0;
+        const inches = parseFloat(document.getElementById('height-in').value) || 0;
+        const totalInches = feet * 12 + inches;
+        if (isNaN(weight) || totalInches === 0) return;
+        bmi = (weight / (totalInches * totalInches)) * 703;
+      }
+
+      document.getElementById('bmi-value').textContent = bmi.toFixed(1);
+
+      let category, color;
+      if (bmi < 18.5) {
+        category = 'Underweight';
+        color = '#3b82f6';
+      } else if (bmi < 25) {
+        category = 'Normal weight';
+        color = '#22c55e';
+      } else if (bmi < 30) {
+        category = 'Overweight';
+        color = '#eab308';
+      } else {
+        category = 'Obese';
+        color = '#ef4444';
+      }
+
+      document.getElementById('bmi-category').textContent = category;
+      document.getElementById('bmi-value').style.color = color;
+
+      // Position marker (scale: 15-40 BMI range)
+      const markerPercent = Math.min(Math.max((bmi - 15) / 25 * 100, 0), 100);
+      document.getElementById('bmi-marker').style.left = markerPercent + '%';
+
+      document.getElementById('results').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

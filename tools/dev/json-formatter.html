@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Formatter & Validator - Free Online JSON Tool</title>
+  <meta name="description" content="Free online JSON formatter and validator. Beautify, minify, and validate JSON data instantly. Perfect for developers and API testing.">
+  <meta name="keywords" content="json formatter, json validator, json beautifier, json minifier, format json online">
+  <link rel="canonical" href="https://freetoolbox.com/tools/dev/json-formatter.html">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    #output { font-family: 'Monaco', 'Consolas', monospace; font-size: 14px; white-space: pre-wrap; }
+    .error { color: #dc3545; }
+    .success { color: #28a745; }
+    .json-key { color: #881391; }
+    .json-string { color: #1a1aa6; }
+    .json-number { color: #1c00cf; }
+    .json-boolean { color: #0d22aa; }
+    .json-null { color: #808080; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Developer Tools</a> &rsaquo; JSON Formatter
+      </div>
+
+      <div class="tool-header">
+        <h1>JSON Formatter & Validator</h1>
+        <p>Format, validate, and minify your JSON data. Syntax highlighting and error detection included.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="json-input">Paste your JSON:</label>
+          <textarea id="json-input" placeholder='{"example": "paste your JSON here"}'></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn" onclick="formatJSON()">Format / Beautify</button>
+          <button class="btn" onclick="minifyJSON()">Minify</button>
+          <button class="btn" onclick="validateJSON()">Validate Only</button>
+          <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+        </div>
+
+        <div id="status" style="margin-top: 16px; font-weight: 600;"></div>
+
+        <div class="result-box" style="margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div class="result-label">Output:</div>
+            <button class="btn copy-btn" onclick="copyResult()">Copy</button>
+          </div>
+          <div id="output" style="min-height: 100px;"></div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>Features</h2>
+        <ul style="margin: 16px 0; padding-left: 20px;">
+          <li><strong>Format/Beautify:</strong> Adds proper indentation and line breaks for readability</li>
+          <li><strong>Minify:</strong> Removes all whitespace for smaller file size</li>
+          <li><strong>Validate:</strong> Checks if your JSON is valid and shows error location</li>
+          <li><strong>Syntax Highlighting:</strong> Color-coded output for easier reading</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function formatJSON() {
+      const input = document.getElementById('json-input').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        const parsed = JSON.parse(input);
+        const formatted = JSON.stringify(parsed, null, 2);
+        output.innerHTML = syntaxHighlight(formatted);
+        status.innerHTML = '<span class="success">Valid JSON - Formatted successfully!</span>';
+      } catch (e) {
+        output.textContent = '';
+        status.innerHTML = `<span class="error">Invalid JSON: ${e.message}</span>`;
+      }
+    }
+
+    function minifyJSON() {
+      const input = document.getElementById('json-input').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        const parsed = JSON.parse(input);
+        const minified = JSON.stringify(parsed);
+        output.textContent = minified;
+        status.innerHTML = '<span class="success">Valid JSON - Minified successfully!</span>';
+      } catch (e) {
+        output.textContent = '';
+        status.innerHTML = `<span class="error">Invalid JSON: ${e.message}</span>`;
+      }
+    }
+
+    function validateJSON() {
+      const input = document.getElementById('json-input').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      try {
+        JSON.parse(input);
+        status.innerHTML = '<span class="success">Valid JSON!</span>';
+        output.textContent = 'Your JSON is valid.';
+      } catch (e) {
+        status.innerHTML = `<span class="error">Invalid JSON: ${e.message}</span>`;
+        output.textContent = '';
+      }
+    }
+
+    function syntaxHighlight(json) {
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        let cls = 'json-number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = 'json-key';
+          } else {
+            cls = 'json-string';
+          }
+        } else if (/true|false/.test(match)) {
+          cls = 'json-boolean';
+        } else if (/null/.test(match)) {
+          cls = 'json-null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+      });
+    }
+
+    function copyResult() {
+      const output = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(output);
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function clearAll() {
+      document.getElementById('json-input').value = '';
+      document.getElementById('output').textContent = '';
+      document.getElementById('status').textContent = '';
+    }
+  </script>
+</body>
+</html>

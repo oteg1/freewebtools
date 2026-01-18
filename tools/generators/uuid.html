@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UUID Generator - Free Online UUID/GUID Generator</title>
+  <meta name="description" content="Free UUID generator. Generate UUID v4 (random) and UUID v1 (timestamp) identifiers instantly. Bulk generation supported.">
+  <meta name="keywords" content="uuid generator, guid generator, random uuid, unique identifier, uuid v4">
+  <link rel="canonical" href="https://freetoolbox.com/tools/generators/uuid.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Generators</a> &rsaquo; UUID Generator
+      </div>
+
+      <div class="tool-header">
+        <h1>UUID Generator</h1>
+        <p>Generate universally unique identifiers (UUIDs/GUIDs) for your applications.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="result-box" style="margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <input type="text" id="uuid" readonly style="font-family: monospace; font-size: 1.2rem; flex: 1; border: none; background: transparent;">
+            <button class="btn copy-btn" onclick="copyUUID()">Copy</button>
+            <button class="btn" onclick="generateSingle()">New</button>
+          </div>
+        </div>
+
+        <div class="checkbox-group" style="margin-bottom: 20px;">
+          <label>
+            <input type="radio" name="version" value="v4" checked onchange="generateSingle()">
+            UUID v4 (Random)
+          </label>
+          <label>
+            <input type="radio" name="version" value="v1" onchange="generateSingle()">
+            UUID v1 (Timestamp)
+          </label>
+        </div>
+
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" id="uppercase" onchange="generateSingle()">
+            Uppercase
+          </label>
+          <label>
+            <input type="checkbox" id="no-hyphens" onchange="generateSingle()">
+            No hyphens
+          </label>
+          <label>
+            <input type="checkbox" id="braces" onchange="generateSingle()">
+            With braces {}
+          </label>
+        </div>
+
+        <div style="margin-top: 30px;">
+          <h3>Generate Multiple UUIDs</h3>
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 12px;">
+            <input type="number" id="count" value="10" min="1" max="100" style="width: 80px;">
+            <button class="btn" onclick="generateMultiple()">Generate</button>
+            <button class="btn btn-secondary" onclick="copyAll()">Copy All</button>
+          </div>
+          <div id="uuid-list" style="margin-top: 16px; max-height: 400px; overflow-y: auto;"></div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>What is a UUID?</h2>
+        <p>A UUID (Universally Unique Identifier), also known as GUID (Globally Unique Identifier), is a 128-bit number used to uniquely identify information in computer systems.</p>
+
+        <h3 style="margin-top: 20px;">UUID Versions</h3>
+        <ul style="margin: 16px 0; padding-left: 20px;">
+          <li><strong>UUID v1:</strong> Based on timestamp and MAC address. Useful when you need time-ordered identifiers.</li>
+          <li><strong>UUID v4:</strong> Randomly generated. Most commonly used for general purposes.</li>
+        </ul>
+
+        <h3 style="margin-top: 20px;">Format</h3>
+        <p style="font-family: monospace; background: #f1f5f9; padding: 12px; border-radius: 8px; margin-top: 8px;">
+          xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx
+        </p>
+        <p style="margin-top: 8px; color: var(--text-muted);">Where M is the version (1 or 4) and N indicates the variant.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function generateUUIDv4() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function generateUUIDv1() {
+      // Simplified v1-like UUID (not strictly RFC compliant but similar pattern)
+      const now = Date.now();
+      const timeHex = now.toString(16).padStart(12, '0');
+      const clockSeq = crypto.getRandomValues(new Uint16Array(1))[0] & 0x3fff | 0x8000;
+      const node = Array.from(crypto.getRandomValues(new Uint8Array(6)))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+
+      return `${timeHex.slice(0, 8)}-${timeHex.slice(8, 12)}-1${timeHex.slice(9, 12)}-${clockSeq.toString(16)}-${node}`;
+    }
+
+    function formatUUID(uuid) {
+      const uppercase = document.getElementById('uppercase').checked;
+      const noHyphens = document.getElementById('no-hyphens').checked;
+      const braces = document.getElementById('braces').checked;
+
+      if (uppercase) uuid = uuid.toUpperCase();
+      if (noHyphens) uuid = uuid.replace(/-/g, '');
+      if (braces) uuid = `{${uuid}}`;
+
+      return uuid;
+    }
+
+    function generateSingle() {
+      const version = document.querySelector('input[name="version"]:checked').value;
+      let uuid = version === 'v4' ? generateUUIDv4() : generateUUIDv1();
+      document.getElementById('uuid').value = formatUUID(uuid);
+    }
+
+    function generateMultiple() {
+      const count = parseInt(document.getElementById('count').value) || 10;
+      const version = document.querySelector('input[name="version"]:checked').value;
+      const container = document.getElementById('uuid-list');
+      container.innerHTML = '';
+
+      for (let i = 0; i < count; i++) {
+        const uuid = formatUUID(version === 'v4' ? generateUUIDv4() : generateUUIDv1());
+        container.innerHTML += `
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; background: #f1f5f9; padding: 8px 12px; border-radius: 6px;">
+            <code style="flex: 1; font-size: 0.9rem;">${uuid}</code>
+            <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 0.85rem;" onclick="navigator.clipboard.writeText('${uuid}')">Copy</button>
+          </div>
+        `;
+      }
+    }
+
+    function copyUUID() {
+      const uuid = document.getElementById('uuid').value;
+      navigator.clipboard.writeText(uuid);
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function copyAll() {
+      const uuids = Array.from(document.getElementById('uuid-list').querySelectorAll('code'))
+        .map(el => el.textContent).join('\n');
+      navigator.clipboard.writeText(uuids);
+    }
+
+    // Generate on load
+    generateSingle();
+  </script>
+</body>
+</html>

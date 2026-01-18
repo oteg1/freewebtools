@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Temperature Converter - Celsius, Fahrenheit, Kelvin</title>
+  <meta name="description" content="Free temperature converter. Convert between Celsius, Fahrenheit, and Kelvin instantly. Simple and accurate temperature conversion.">
+  <meta name="keywords" content="temperature converter, celsius to fahrenheit, fahrenheit to celsius, kelvin converter">
+  <link rel="canonical" href="https://freetoolbox.com/tools/conversion/temperature.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Conversion Tools</a> &rsaquo; Temperature Converter
+      </div>
+
+      <div class="tool-header">
+        <h1>Temperature Converter</h1>
+        <p>Convert between Celsius, Fahrenheit, and Kelvin temperature scales.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="celsius">Celsius (C)</label>
+          <input type="number" id="celsius" placeholder="0" oninput="fromCelsius()">
+        </div>
+
+        <div class="input-group">
+          <label for="fahrenheit">Fahrenheit (F)</label>
+          <input type="number" id="fahrenheit" placeholder="32" oninput="fromFahrenheit()">
+        </div>
+
+        <div class="input-group">
+          <label for="kelvin">Kelvin (K)</label>
+          <input type="number" id="kelvin" placeholder="273.15" oninput="fromKelvin()">
+        </div>
+
+        <div class="result-box" style="margin-top: 20px; text-align: center;">
+          <div id="formula" style="font-size: 1.1rem;"></div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>Conversion Formulas</h2>
+        <div style="margin-top: 16px; display: grid; gap: 16px;">
+          <div style="background: #f1f5f9; padding: 16px; border-radius: 8px;">
+            <strong>Celsius to Fahrenheit:</strong>
+            <p style="font-family: monospace; margin-top: 8px;">F = (C x 9/5) + 32</p>
+          </div>
+          <div style="background: #f1f5f9; padding: 16px; border-radius: 8px;">
+            <strong>Fahrenheit to Celsius:</strong>
+            <p style="font-family: monospace; margin-top: 8px;">C = (F - 32) x 5/9</p>
+          </div>
+          <div style="background: #f1f5f9; padding: 16px; border-radius: 8px;">
+            <strong>Celsius to Kelvin:</strong>
+            <p style="font-family: monospace; margin-top: 8px;">K = C + 273.15</p>
+          </div>
+        </div>
+
+        <h2 style="margin-top: 30px;">Common Reference Points</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+          <tr style="background: #f1f5f9;">
+            <th style="padding: 12px; text-align: left;">Description</th>
+            <th style="padding: 12px;">C</th>
+            <th style="padding: 12px;">F</th>
+            <th style="padding: 12px;">K</th>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Absolute Zero</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">-273.15</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">-459.67</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">0</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Water Freezes</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">0</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">32</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">273.15</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Room Temperature</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">20-22</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">68-72</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">293-295</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0;">Body Temperature</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">37</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">98.6</td>
+            <td style="padding: 12px; border-bottom: 1px solid #e2e8f0; text-align: center;">310.15</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px;">Water Boils</td>
+            <td style="padding: 12px; text-align: center;">100</td>
+            <td style="padding: 12px; text-align: center;">212</td>
+            <td style="padding: 12px; text-align: center;">373.15</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    let isUpdating = false;
+
+    function fromCelsius() {
+      if (isUpdating) return;
+      isUpdating = true;
+
+      const c = parseFloat(document.getElementById('celsius').value);
+      if (!isNaN(c)) {
+        const f = (c * 9/5) + 32;
+        const k = c + 273.15;
+        document.getElementById('fahrenheit').value = f.toFixed(2);
+        document.getElementById('kelvin').value = k.toFixed(2);
+        document.getElementById('formula').innerHTML = `${c}°C = ${f.toFixed(2)}°F = ${k.toFixed(2)}K`;
+      }
+
+      isUpdating = false;
+    }
+
+    function fromFahrenheit() {
+      if (isUpdating) return;
+      isUpdating = true;
+
+      const f = parseFloat(document.getElementById('fahrenheit').value);
+      if (!isNaN(f)) {
+        const c = (f - 32) * 5/9;
+        const k = c + 273.15;
+        document.getElementById('celsius').value = c.toFixed(2);
+        document.getElementById('kelvin').value = k.toFixed(2);
+        document.getElementById('formula').innerHTML = `${f}°F = ${c.toFixed(2)}°C = ${k.toFixed(2)}K`;
+      }
+
+      isUpdating = false;
+    }
+
+    function fromKelvin() {
+      if (isUpdating) return;
+      isUpdating = true;
+
+      const k = parseFloat(document.getElementById('kelvin').value);
+      if (!isNaN(k)) {
+        const c = k - 273.15;
+        const f = (c * 9/5) + 32;
+        document.getElementById('celsius').value = c.toFixed(2);
+        document.getElementById('fahrenheit').value = f.toFixed(2);
+        document.getElementById('formula').innerHTML = `${k}K = ${c.toFixed(2)}°C = ${f.toFixed(2)}°F`;
+      }
+
+      isUpdating = false;
+    }
+  </script>
+</body>
+</html>

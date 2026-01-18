@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Converter - HEX, RGB, HSL Converter Online</title>
+  <meta name="description" content="Free online color converter. Convert between HEX, RGB, and HSL color formats instantly. Includes color picker and preview.">
+  <meta name="keywords" content="color converter, hex to rgb, rgb to hex, hsl converter, color picker, color codes">
+  <link rel="canonical" href="https://freetoolbox.com/tools/conversion/color-converter.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Conversion Tools</a> &rsaquo; Color Converter
+      </div>
+
+      <div class="tool-header">
+        <h1>Color Converter</h1>
+        <p>Convert colors between HEX, RGB, and HSL formats. Use the color picker or enter values directly.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="color-preview" id="color-preview" style="background: #2563eb;"></div>
+
+        <div class="input-group">
+          <label for="color-picker">Color Picker</label>
+          <input type="color" id="color-picker" value="#2563eb" style="width: 100%; height: 50px; cursor: pointer;" oninput="fromPicker()">
+        </div>
+
+        <div class="color-inputs">
+          <div class="input-group">
+            <label for="hex">HEX</label>
+            <input type="text" id="hex" placeholder="#2563eb" oninput="fromHex()">
+            <button class="btn copy-btn" onclick="copy('hex')" style="margin-top: 8px; width: 100%;">Copy</button>
+          </div>
+
+          <div class="input-group">
+            <label>RGB</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <input type="number" id="r" placeholder="R" min="0" max="255" oninput="fromRGB()">
+              <input type="number" id="g" placeholder="G" min="0" max="255" oninput="fromRGB()">
+              <input type="number" id="b" placeholder="B" min="0" max="255" oninput="fromRGB()">
+            </div>
+            <button class="btn copy-btn" onclick="copyRGB()" style="margin-top: 8px; width: 100%;">Copy</button>
+          </div>
+
+          <div class="input-group">
+            <label>HSL</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+              <input type="number" id="h" placeholder="H" min="0" max="360" oninput="fromHSL()">
+              <input type="number" id="s" placeholder="S%" min="0" max="100" oninput="fromHSL()">
+              <input type="number" id="l" placeholder="L%" min="0" max="100" oninput="fromHSL()">
+            </div>
+            <button class="btn copy-btn" onclick="copyHSL()" style="margin-top: 8px; width: 100%;">Copy</button>
+          </div>
+        </div>
+
+        <div class="result-box" style="margin-top: 24px;">
+          <h3 style="margin-bottom: 12px;">CSS Values</h3>
+          <p style="font-family: monospace; margin-bottom: 8px;" id="css-hex">color: #2563eb;</p>
+          <p style="font-family: monospace; margin-bottom: 8px;" id="css-rgb">color: rgb(37, 99, 235);</p>
+          <p style="font-family: monospace;" id="css-hsl">color: hsl(217, 91%, 53%);</p>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      return { r, g, b };
+    }
+
+    function rgbToHex(r, g, b) {
+      return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255; g /= 255; b /= 255;
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+
+      if (max === min) {
+        h = s = 0;
+      } else {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+          case g: h = ((b - r) / d + 2) / 6; break;
+          case b: h = ((r - g) / d + 4) / 6; break;
+        }
+      }
+
+      return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+    }
+
+    function hslToRgb(h, s, l) {
+      h /= 360; s /= 100; l /= 100;
+      let r, g, b;
+
+      if (s === 0) {
+        r = g = b = l;
+      } else {
+        const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1/6) return p + (q - p) * 6 * t;
+          if (t < 1/2) return q;
+          if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+        };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+      }
+
+      return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+    }
+
+    function updateAll(r, g, b) {
+      const hex = rgbToHex(r, g, b);
+      const hsl = rgbToHsl(r, g, b);
+
+      document.getElementById('hex').value = hex;
+      document.getElementById('r').value = r;
+      document.getElementById('g').value = g;
+      document.getElementById('b').value = b;
+      document.getElementById('h').value = hsl.h;
+      document.getElementById('s').value = hsl.s;
+      document.getElementById('l').value = hsl.l;
+      document.getElementById('color-picker').value = hex;
+      document.getElementById('color-preview').style.background = hex;
+
+      document.getElementById('css-hex').textContent = `color: ${hex};`;
+      document.getElementById('css-rgb').textContent = `color: rgb(${r}, ${g}, ${b});`;
+      document.getElementById('css-hsl').textContent = `color: hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%);`;
+    }
+
+    function fromPicker() {
+      const hex = document.getElementById('color-picker').value;
+      const rgb = hexToRgb(hex);
+      updateAll(rgb.r, rgb.g, rgb.b);
+    }
+
+    function fromHex() {
+      let hex = document.getElementById('hex').value;
+      if (!hex.startsWith('#')) hex = '#' + hex;
+      if (!/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(hex)) return;
+      const rgb = hexToRgb(hex);
+      updateAll(rgb.r, rgb.g, rgb.b);
+    }
+
+    function fromRGB() {
+      const r = parseInt(document.getElementById('r').value) || 0;
+      const g = parseInt(document.getElementById('g').value) || 0;
+      const b = parseInt(document.getElementById('b').value) || 0;
+      if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) return;
+      updateAll(r, g, b);
+    }
+
+    function fromHSL() {
+      const h = parseInt(document.getElementById('h').value) || 0;
+      const s = parseInt(document.getElementById('s').value) || 0;
+      const l = parseInt(document.getElementById('l').value) || 0;
+      const rgb = hslToRgb(h, s, l);
+      updateAll(rgb.r, rgb.g, rgb.b);
+    }
+
+    function copy(id) {
+      navigator.clipboard.writeText(document.getElementById(id).value);
+    }
+
+    function copyRGB() {
+      const r = document.getElementById('r').value;
+      const g = document.getElementById('g').value;
+      const b = document.getElementById('b').value;
+      navigator.clipboard.writeText(`rgb(${r}, ${g}, ${b})`);
+    }
+
+    function copyHSL() {
+      const h = document.getElementById('h').value;
+      const s = document.getElementById('s').value;
+      const l = document.getElementById('l').value;
+      navigator.clipboard.writeText(`hsl(${h}, ${s}%, ${l}%)`);
+    }
+
+    // Initialize with default color
+    fromPicker();
+  </script>
+</body>
+</html>

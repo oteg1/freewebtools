@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Percentage Calculator - Free Online Percent Calculator</title>
+  <meta name="description" content="Free online percentage calculator. Calculate percentages, percentage change, percentage of a number, and more. Fast and easy to use.">
+  <meta name="keywords" content="percentage calculator, percent calculator, calculate percentage, percentage of, percentage change">
+  <link rel="canonical" href="https://freetoolbox.com/tools/math/percentage.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Math Tools</a> &rsaquo; Percentage Calculator
+      </div>
+
+      <div class="tool-header">
+        <h1>Percentage Calculator</h1>
+        <p>Calculate percentages quickly with multiple calculation modes. Perfect for discounts, tips, grades, and more.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <h3 style="margin-bottom: 16px;">What is X% of Y?</h3>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span>What is</span>
+          <input type="number" id="calc1-percent" style="width: 100px;" placeholder="X">
+          <span>% of</span>
+          <input type="number" id="calc1-number" style="width: 120px;" placeholder="Y">
+          <span>?</span>
+          <button class="btn" onclick="calc1()">Calculate</button>
+        </div>
+        <div id="result1" class="result-box" style="display: none;"></div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">X is what % of Y?</h3>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <input type="number" id="calc2-part" style="width: 120px;" placeholder="X">
+          <span>is what % of</span>
+          <input type="number" id="calc2-whole" style="width: 120px;" placeholder="Y">
+          <span>?</span>
+          <button class="btn" onclick="calc2()">Calculate</button>
+        </div>
+        <div id="result2" class="result-box" style="display: none;"></div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Percentage Change</h3>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span>From</span>
+          <input type="number" id="calc3-from" style="width: 120px;" placeholder="Old value">
+          <span>to</span>
+          <input type="number" id="calc3-to" style="width: 120px;" placeholder="New value">
+          <button class="btn" onclick="calc3()">Calculate</button>
+        </div>
+        <div id="result3" class="result-box" style="display: none;"></div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Increase/Decrease by Percentage</h3>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <input type="number" id="calc4-number" style="width: 120px;" placeholder="Number">
+          <select id="calc4-direction" style="width: 120px;">
+            <option value="increase">+ increase</option>
+            <option value="decrease">- decrease</option>
+          </select>
+          <span>by</span>
+          <input type="number" id="calc4-percent" style="width: 100px;" placeholder="%">
+          <span>%</span>
+          <button class="btn" onclick="calc4()">Calculate</button>
+        </div>
+        <div id="result4" class="result-box" style="display: none;"></div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function calc1() {
+      const percent = parseFloat(document.getElementById('calc1-percent').value);
+      const number = parseFloat(document.getElementById('calc1-number').value);
+      if (isNaN(percent) || isNaN(number)) return;
+      const result = (percent / 100) * number;
+      const el = document.getElementById('result1');
+      el.style.display = 'block';
+      el.innerHTML = `<strong>${percent}% of ${number} = ${result.toFixed(2)}</strong>`;
+    }
+
+    function calc2() {
+      const part = parseFloat(document.getElementById('calc2-part').value);
+      const whole = parseFloat(document.getElementById('calc2-whole').value);
+      if (isNaN(part) || isNaN(whole) || whole === 0) return;
+      const result = (part / whole) * 100;
+      const el = document.getElementById('result2');
+      el.style.display = 'block';
+      el.innerHTML = `<strong>${part} is ${result.toFixed(2)}% of ${whole}</strong>`;
+    }
+
+    function calc3() {
+      const from = parseFloat(document.getElementById('calc3-from').value);
+      const to = parseFloat(document.getElementById('calc3-to').value);
+      if (isNaN(from) || isNaN(to) || from === 0) return;
+      const change = ((to - from) / Math.abs(from)) * 100;
+      const el = document.getElementById('result3');
+      el.style.display = 'block';
+      const direction = change >= 0 ? 'increase' : 'decrease';
+      el.innerHTML = `<strong>${Math.abs(change).toFixed(2)}% ${direction}</strong> (from ${from} to ${to})`;
+    }
+
+    function calc4() {
+      const number = parseFloat(document.getElementById('calc4-number').value);
+      const percent = parseFloat(document.getElementById('calc4-percent').value);
+      const direction = document.getElementById('calc4-direction').value;
+      if (isNaN(number) || isNaN(percent)) return;
+      const change = (percent / 100) * number;
+      const result = direction === 'increase' ? number + change : number - change;
+      const el = document.getElementById('result4');
+      el.style.display = 'block';
+      el.innerHTML = `<strong>${number} ${direction === 'increase' ? '+' : '-'} ${percent}% = ${result.toFixed(2)}</strong>`;
+    }
+  </script>
+</body>
+</html>

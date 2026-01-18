@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer - Free Online Timer and Stopwatch</title>
+  <meta name="description" content="Free online countdown timer. Set custom countdowns, use quick presets, and track time with a stopwatch. Works in your browser.">
+  <meta name="keywords" content="countdown timer, online timer, stopwatch, timer clock, pomodoro timer">
+  <link rel="canonical" href="https://freetoolbox.com/tools/generators/countdown.html">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .timer-display { font-size: 4rem; font-weight: bold; font-family: monospace; text-align: center; padding: 40px; }
+    @media (max-width: 768px) { .timer-display { font-size: 2.5rem; padding: 20px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Generators</a> &rsaquo; Countdown Timer
+      </div>
+
+      <div class="tool-header">
+        <h1>Countdown Timer</h1>
+        <p>Set a countdown timer or use the stopwatch. Runs entirely in your browser.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="timer-display" id="timer-display">00:00:00</div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;">
+          <div class="input-group">
+            <label for="hours">Hours</label>
+            <input type="number" id="hours" value="0" min="0" max="99">
+          </div>
+          <div class="input-group">
+            <label for="minutes">Minutes</label>
+            <input type="number" id="minutes" value="5" min="0" max="59">
+          </div>
+          <div class="input-group">
+            <label for="seconds">Seconds</label>
+            <input type="number" id="seconds" value="0" min="0" max="59">
+          </div>
+        </div>
+
+        <div class="btn-group" style="justify-content: center;">
+          <button class="btn" id="start-btn" onclick="startTimer()">Start</button>
+          <button class="btn btn-secondary" onclick="pauseTimer()">Pause</button>
+          <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <h3 style="margin-bottom: 12px;">Quick Timers</h3>
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="setQuick(0, 1, 0)">1 min</button>
+            <button class="btn btn-secondary" onclick="setQuick(0, 5, 0)">5 min</button>
+            <button class="btn btn-secondary" onclick="setQuick(0, 10, 0)">10 min</button>
+            <button class="btn btn-secondary" onclick="setQuick(0, 15, 0)">15 min</button>
+            <button class="btn btn-secondary" onclick="setQuick(0, 25, 0)">25 min</button>
+            <button class="btn btn-secondary" onclick="setQuick(0, 30, 0)">30 min</button>
+            <button class="btn btn-secondary" onclick="setQuick(1, 0, 0)">1 hour</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-container" style="margin-top: 24px;">
+        <h3 style="margin-bottom: 16px;">Stopwatch</h3>
+
+        <div class="timer-display" id="stopwatch-display" style="font-size: 3rem;">00:00:00.000</div>
+
+        <div class="btn-group" style="justify-content: center;">
+          <button class="btn" onclick="startStopwatch()">Start</button>
+          <button class="btn btn-secondary" onclick="pauseStopwatch()">Pause</button>
+          <button class="btn btn-secondary" onclick="lapStopwatch()">Lap</button>
+          <button class="btn btn-secondary" onclick="resetStopwatch()">Reset</button>
+        </div>
+
+        <div id="laps" style="margin-top: 16px;"></div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Countdown Timer
+    let timerInterval = null;
+    let remainingSeconds = 0;
+
+    function updateTimerDisplay() {
+      const h = Math.floor(remainingSeconds / 3600);
+      const m = Math.floor((remainingSeconds % 3600) / 60);
+      const s = remainingSeconds % 60;
+      document.getElementById('timer-display').textContent =
+        `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return;
+
+      if (remainingSeconds === 0) {
+        const h = parseInt(document.getElementById('hours').value) || 0;
+        const m = parseInt(document.getElementById('minutes').value) || 0;
+        const s = parseInt(document.getElementById('seconds').value) || 0;
+        remainingSeconds = h * 3600 + m * 60 + s;
+      }
+
+      if (remainingSeconds <= 0) return;
+
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        updateTimerDisplay();
+
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          document.getElementById('timer-display').style.color = '#ef4444';
+          // Play sound or alert
+          if (Notification.permission === 'granted') {
+            new Notification('Timer Complete!');
+          }
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      remainingSeconds = 0;
+      document.getElementById('timer-display').textContent = '00:00:00';
+      document.getElementById('timer-display').style.color = '';
+    }
+
+    function setQuick(h, m, s) {
+      document.getElementById('hours').value = h;
+      document.getElementById('minutes').value = m;
+      document.getElementById('seconds').value = s;
+      resetTimer();
+      remainingSeconds = h * 3600 + m * 60 + s;
+      updateTimerDisplay();
+      startTimer();
+    }
+
+    // Stopwatch
+    let stopwatchInterval = null;
+    let stopwatchMs = 0;
+    let laps = [];
+
+    function updateStopwatchDisplay() {
+      const h = Math.floor(stopwatchMs / 3600000);
+      const m = Math.floor((stopwatchMs % 3600000) / 60000);
+      const s = Math.floor((stopwatchMs % 60000) / 1000);
+      const ms = stopwatchMs % 1000;
+      document.getElementById('stopwatch-display').textContent =
+        `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
+    }
+
+    function startStopwatch() {
+      if (stopwatchInterval) return;
+      const startTime = Date.now() - stopwatchMs;
+      stopwatchInterval = setInterval(() => {
+        stopwatchMs = Date.now() - startTime;
+        updateStopwatchDisplay();
+      }, 10);
+    }
+
+    function pauseStopwatch() {
+      if (stopwatchInterval) {
+        clearInterval(stopwatchInterval);
+        stopwatchInterval = null;
+      }
+    }
+
+    function lapStopwatch() {
+      if (stopwatchMs > 0) {
+        laps.push(stopwatchMs);
+        renderLaps();
+      }
+    }
+
+    function resetStopwatch() {
+      pauseStopwatch();
+      stopwatchMs = 0;
+      laps = [];
+      updateStopwatchDisplay();
+      document.getElementById('laps').innerHTML = '';
+    }
+
+    function renderLaps() {
+      const container = document.getElementById('laps');
+      container.innerHTML = laps.map((ms, i) => {
+        const h = Math.floor(ms / 3600000);
+        const m = Math.floor((ms % 3600000) / 60000);
+        const s = Math.floor((ms % 60000) / 1000);
+        const msVal = ms % 1000;
+        return `<div style="padding: 8px; background: #f1f5f9; margin-bottom: 4px; border-radius: 4px;">
+          Lap ${i + 1}: ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}.${msVal.toString().padStart(3, '0')}
+        </div>`;
+      }).reverse().join('');
+    }
+
+    // Request notification permission
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  </script>
+</body>
+</html>

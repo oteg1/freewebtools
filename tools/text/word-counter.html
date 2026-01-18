@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Counter - Free Online Character & Word Count Tool</title>
+  <meta name="description" content="Free online word counter tool. Count words, characters, sentences, and paragraphs instantly. Perfect for essays, articles, and social media posts.">
+  <meta name="keywords" content="word counter, character counter, word count, character count, text analyzer">
+  <link rel="canonical" href="https://freetoolbox.com/tools/text/word-counter.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Text Tools</a> &rsaquo; Word Counter
+      </div>
+
+      <div class="tool-header">
+        <h1>Word Counter</h1>
+        <p>Count words, characters, sentences, and paragraphs in your text. Real-time analysis as you type.</p>
+      </div>
+
+      <!-- Ad Placement -->
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="text-input">Enter or paste your text:</label>
+          <textarea id="text-input" placeholder="Start typing or paste your text here..."></textarea>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="word-count">0</div>
+            <div class="stat-label">Words</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="char-count">0</div>
+            <div class="stat-label">Characters</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="char-no-space">0</div>
+            <div class="stat-label">Characters (no spaces)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="sentence-count">0</div>
+            <div class="stat-label">Sentences</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="paragraph-count">0</div>
+            <div class="stat-label">Paragraphs</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="reading-time">0</div>
+            <div class="stat-label">Min. Read Time</div>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 20px;">
+          <button class="btn btn-secondary" onclick="clearText()">Clear</button>
+          <button class="btn" onclick="copyStats()">Copy Stats</button>
+        </div>
+      </div>
+
+      <!-- Ad Placement -->
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>How to Use</h2>
+        <p>Simply paste or type your text in the box above. The tool automatically counts:</p>
+        <ul style="margin: 16px 0; padding-left: 20px;">
+          <li><strong>Words:</strong> Total number of words separated by spaces</li>
+          <li><strong>Characters:</strong> Total characters including spaces</li>
+          <li><strong>Characters (no spaces):</strong> Characters excluding spaces</li>
+          <li><strong>Sentences:</strong> Based on period, question mark, and exclamation mark endings</li>
+          <li><strong>Paragraphs:</strong> Sections separated by blank lines</li>
+          <li><strong>Reading Time:</strong> Estimated time to read at 200 words per minute</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const textInput = document.getElementById('text-input');
+
+    textInput.addEventListener('input', analyze);
+
+    function analyze() {
+      const text = textInput.value;
+
+      // Words
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      document.getElementById('word-count').textContent = words;
+
+      // Characters
+      document.getElementById('char-count').textContent = text.length;
+      document.getElementById('char-no-space').textContent = text.replace(/\s/g, '').length;
+
+      // Sentences
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
+      document.getElementById('sentence-count').textContent = sentences;
+
+      // Paragraphs
+      const paragraphs = text.split(/\n\n+/).filter(p => p.trim()).length;
+      document.getElementById('paragraph-count').textContent = paragraphs;
+
+      // Reading time (200 wpm average)
+      const readingTime = Math.ceil(words / 200);
+      document.getElementById('reading-time').textContent = readingTime;
+    }
+
+    function clearText() {
+      textInput.value = '';
+      analyze();
+    }
+
+    function copyStats() {
+      const stats = `Words: ${document.getElementById('word-count').textContent}
+Characters: ${document.getElementById('char-count').textContent}
+Characters (no spaces): ${document.getElementById('char-no-space').textContent}
+Sentences: ${document.getElementById('sentence-count').textContent}
+Paragraphs: ${document.getElementById('paragraph-count').textContent}
+Reading Time: ${document.getElementById('reading-time').textContent} min`;
+
+      navigator.clipboard.writeText(stats);
+      alert('Stats copied to clipboard!');
+    }
+  </script>
+</body>
+</html>

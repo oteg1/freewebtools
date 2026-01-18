@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter - Free Online Measurement Converter</title>
+  <meta name="description" content="Free online unit converter. Convert between length, weight, volume, area, and more. Instant conversion with common units.">
+  <meta name="keywords" content="unit converter, measurement converter, convert units, length converter, weight converter">
+  <link rel="canonical" href="https://freetoolbox.com/tools/conversion/unit-converter.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Conversion Tools</a> &rsaquo; Unit Converter
+      </div>
+
+      <div class="tool-header">
+        <h1>Unit Converter</h1>
+        <p>Convert between different units of measurement quickly and accurately.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="category">Category</label>
+          <select id="category" onchange="updateUnits()">
+            <option value="length">Length</option>
+            <option value="weight">Weight / Mass</option>
+            <option value="volume">Volume</option>
+            <option value="area">Area</option>
+            <option value="speed">Speed</option>
+            <option value="data">Digital Storage</option>
+          </select>
+        </div>
+
+        <div class="converter-row">
+          <div class="input-group">
+            <label for="from-value">From</label>
+            <input type="number" id="from-value" placeholder="1" oninput="convert()">
+            <select id="from-unit" onchange="convert()" style="margin-top: 8px;"></select>
+          </div>
+
+          <button class="swap-btn" onclick="swapUnits()" title="Swap units">
+            &#8644;
+          </button>
+
+          <div class="input-group">
+            <label for="to-value">To</label>
+            <input type="number" id="to-value" readonly>
+            <select id="to-unit" onchange="convert()" style="margin-top: 8px;"></select>
+          </div>
+        </div>
+
+        <div class="result-box" style="margin-top: 20px; text-align: center;">
+          <div id="formula" style="font-size: 1.2rem;"></div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const units = {
+      length: {
+        meter: 1,
+        kilometer: 1000,
+        centimeter: 0.01,
+        millimeter: 0.001,
+        mile: 1609.344,
+        yard: 0.9144,
+        foot: 0.3048,
+        inch: 0.0254
+      },
+      weight: {
+        kilogram: 1,
+        gram: 0.001,
+        milligram: 0.000001,
+        pound: 0.453592,
+        ounce: 0.0283495,
+        ton: 1000
+      },
+      volume: {
+        liter: 1,
+        milliliter: 0.001,
+        'cubic meter': 1000,
+        gallon: 3.78541,
+        quart: 0.946353,
+        pint: 0.473176,
+        cup: 0.236588,
+        'fluid ounce': 0.0295735
+      },
+      area: {
+        'square meter': 1,
+        'square kilometer': 1000000,
+        'square foot': 0.092903,
+        'square yard': 0.836127,
+        acre: 4046.86,
+        hectare: 10000
+      },
+      speed: {
+        'meters/second': 1,
+        'kilometers/hour': 0.277778,
+        'miles/hour': 0.44704,
+        'feet/second': 0.3048,
+        knot: 0.514444
+      },
+      data: {
+        byte: 1,
+        kilobyte: 1024,
+        megabyte: 1048576,
+        gigabyte: 1073741824,
+        terabyte: 1099511627776,
+        bit: 0.125
+      }
+    };
+
+    function updateUnits() {
+      const category = document.getElementById('category').value;
+      const fromSelect = document.getElementById('from-unit');
+      const toSelect = document.getElementById('to-unit');
+
+      fromSelect.innerHTML = '';
+      toSelect.innerHTML = '';
+
+      Object.keys(units[category]).forEach((unit, i) => {
+        fromSelect.innerHTML += `<option value="${unit}">${unit}</option>`;
+        toSelect.innerHTML += `<option value="${unit}" ${i === 1 ? 'selected' : ''}>${unit}</option>`;
+      });
+
+      convert();
+    }
+
+    function convert() {
+      const category = document.getElementById('category').value;
+      const fromValue = parseFloat(document.getElementById('from-value').value) || 0;
+      const fromUnit = document.getElementById('from-unit').value;
+      const toUnit = document.getElementById('to-unit').value;
+
+      const baseValue = fromValue * units[category][fromUnit];
+      const result = baseValue / units[category][toUnit];
+
+      document.getElementById('to-value').value = result.toPrecision(10).replace(/\.?0+$/, '');
+
+      document.getElementById('formula').innerHTML =
+        `<strong>${fromValue} ${fromUnit}</strong> = <strong>${result.toPrecision(6)} ${toUnit}</strong>`;
+    }
+
+    function swapUnits() {
+      const fromUnit = document.getElementById('from-unit');
+      const toUnit = document.getElementById('to-unit');
+      const fromValue = document.getElementById('from-value');
+      const toValue = document.getElementById('to-value');
+
+      const tempUnit = fromUnit.value;
+      fromUnit.value = toUnit.value;
+      toUnit.value = tempUnit;
+
+      fromValue.value = toValue.value;
+      convert();
+    }
+
+    // Initialize
+    updateUnits();
+    document.getElementById('from-value').value = 1;
+    convert();
+  </script>
+</body>
+</html>

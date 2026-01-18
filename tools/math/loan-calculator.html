@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Calculator - Free Monthly Payment Calculator</title>
+  <meta name="description" content="Free loan calculator. Calculate monthly payments, total interest, and amortization for mortgages, car loans, and personal loans.">
+  <meta name="keywords" content="loan calculator, mortgage calculator, monthly payment, amortization, interest calculator">
+  <link rel="canonical" href="https://freetoolbox.com/tools/math/loan-calculator.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Math Tools</a> &rsaquo; Loan Calculator
+      </div>
+
+      <div class="tool-header">
+        <h1>Loan Calculator</h1>
+        <p>Calculate your monthly payments, total interest, and see a full amortization breakdown.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="principal">Loan Amount ($)</label>
+          <input type="number" id="principal" placeholder="100000" min="0">
+        </div>
+
+        <div class="input-group">
+          <label for="rate">Annual Interest Rate (%)</label>
+          <input type="number" id="rate" placeholder="5.5" step="0.1" min="0">
+        </div>
+
+        <div class="input-group">
+          <label for="years">Loan Term (Years)</label>
+          <input type="number" id="years" placeholder="30" min="1" max="50">
+        </div>
+
+        <button class="btn" onclick="calculate()" style="width: 100%;">Calculate</button>
+
+        <div class="stats-grid" style="margin-top: 30px;">
+          <div class="stat-item">
+            <div class="stat-value" id="monthly">$0.00</div>
+            <div class="stat-label">Monthly Payment</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="total-interest">$0.00</div>
+            <div class="stat-label">Total Interest</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="total-payment">$0.00</div>
+            <div class="stat-label">Total Payment</div>
+          </div>
+        </div>
+
+        <div id="breakdown" style="margin-top: 30px; display: none;">
+          <h3>Payment Breakdown</h3>
+          <div style="margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span>Principal</span>
+              <span id="principal-display">$0</span>
+            </div>
+            <div style="background: #e2e8f0; border-radius: 8px; height: 24px; overflow: hidden;">
+              <div id="principal-bar" style="background: #2563eb; height: 100%; width: 0%; transition: width 0.3s;"></div>
+            </div>
+          </div>
+          <div style="margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span>Interest</span>
+              <span id="interest-display">$0</span>
+            </div>
+            <div style="background: #e2e8f0; border-radius: 8px; height: 24px; overflow: hidden;">
+              <div id="interest-bar" style="background: #ef4444; height: 100%; width: 0%; transition: width 0.3s;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>How Loan Payments Work</h2>
+        <p>Your monthly payment is calculated using this formula:</p>
+        <div style="background: #f1f5f9; padding: 16px; border-radius: 8px; margin: 16px 0; font-family: monospace; text-align: center;">
+          M = P * [r(1+r)^n] / [(1+r)^n - 1]
+        </div>
+        <p>Where:</p>
+        <ul style="padding-left: 20px;">
+          <li><strong>M</strong> = Monthly payment</li>
+          <li><strong>P</strong> = Principal (loan amount)</li>
+          <li><strong>r</strong> = Monthly interest rate (annual rate / 12)</li>
+          <li><strong>n</strong> = Total number of payments</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function calculate() {
+      const principal = parseFloat(document.getElementById('principal').value);
+      const annualRate = parseFloat(document.getElementById('rate').value);
+      const years = parseFloat(document.getElementById('years').value);
+
+      if (isNaN(principal) || isNaN(annualRate) || isNaN(years)) return;
+
+      const monthlyRate = annualRate / 100 / 12;
+      const numPayments = years * 12;
+
+      let monthly;
+      if (monthlyRate === 0) {
+        monthly = principal / numPayments;
+      } else {
+        monthly = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+      }
+
+      const totalPayment = monthly * numPayments;
+      const totalInterest = totalPayment - principal;
+
+      document.getElementById('monthly').textContent = '$' + monthly.toFixed(2);
+      document.getElementById('total-interest').textContent = '$' + totalInterest.toFixed(2);
+      document.getElementById('total-payment').textContent = '$' + totalPayment.toFixed(2);
+
+      // Update breakdown
+      document.getElementById('breakdown').style.display = 'block';
+      document.getElementById('principal-display').textContent = '$' + principal.toLocaleString();
+      document.getElementById('interest-display').textContent = '$' + totalInterest.toFixed(2);
+
+      const principalPercent = (principal / totalPayment) * 100;
+      const interestPercent = (totalInterest / totalPayment) * 100;
+
+      document.getElementById('principal-bar').style.width = principalPercent + '%';
+      document.getElementById('interest-bar').style.width = interestPercent + '%';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Diff Checker - Compare Two Texts Online Free</title>
+  <meta name="description" content="Free online text comparison tool. Find differences between two texts instantly. Perfect for comparing code, documents, and content revisions.">
+  <meta name="keywords" content="text diff, compare text, text comparison, diff checker, find differences">
+  <link rel="canonical" href="https://freetoolbox.com/tools/text/text-diff.html">
+  <link rel="stylesheet" href="../../css/style.css">
+  <style>
+    .diff-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { .diff-container { grid-template-columns: 1fr; } }
+    .diff-result { margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+    .diff-added { background: #d4edda; color: #155724; }
+    .diff-removed { background: #f8d7da; color: #721c24; text-decoration: line-through; }
+    .diff-line { padding: 4px 8px; margin: 2px 0; border-radius: 4px; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Text Tools</a> &rsaquo; Text Diff Checker
+      </div>
+
+      <div class="tool-header">
+        <h1>Text Diff Checker</h1>
+        <p>Compare two texts and see the differences highlighted. Perfect for reviewing changes in documents or code.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="diff-container">
+          <div class="input-group">
+            <label for="text1">Original Text:</label>
+            <textarea id="text1" placeholder="Paste original text here..."></textarea>
+          </div>
+          <div class="input-group">
+            <label for="text2">Modified Text:</label>
+            <textarea id="text2" placeholder="Paste modified text here..."></textarea>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 20px; justify-content: center;">
+          <button class="btn" onclick="compare()">Compare Texts</button>
+          <button class="btn btn-secondary" onclick="clearAll()">Clear All</button>
+          <button class="btn btn-secondary" onclick="swapTexts()">Swap Texts</button>
+        </div>
+
+        <div class="diff-result" id="result" style="display: none;">
+          <div class="result-label">Differences:</div>
+          <div id="diff-output"></div>
+        </div>
+
+        <div class="stats-grid" id="stats" style="display: none;">
+          <div class="stat-item">
+            <div class="stat-value" id="added-count">0</div>
+            <div class="stat-label">Lines Added</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="removed-count">0</div>
+            <div class="stat-label">Lines Removed</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="unchanged-count">0</div>
+            <div class="stat-label">Lines Unchanged</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function compare() {
+      const text1 = document.getElementById('text1').value;
+      const text2 = document.getElementById('text2').value;
+
+      const lines1 = text1.split('\n');
+      const lines2 = text2.split('\n');
+
+      let output = '';
+      let added = 0, removed = 0, unchanged = 0;
+
+      const maxLen = Math.max(lines1.length, lines2.length);
+
+      // Simple line-by-line comparison
+      const set1 = new Set(lines1);
+      const set2 = new Set(lines2);
+
+      // Show removed lines
+      lines1.forEach(line => {
+        if (!set2.has(line)) {
+          output += `<div class="diff-line diff-removed">- ${escapeHtml(line)}</div>`;
+          removed++;
+        } else {
+          output += `<div class="diff-line">  ${escapeHtml(line)}</div>`;
+          unchanged++;
+        }
+      });
+
+      // Show added lines
+      lines2.forEach(line => {
+        if (!set1.has(line)) {
+          output += `<div class="diff-line diff-added">+ ${escapeHtml(line)}</div>`;
+          added++;
+        }
+      });
+
+      if (text1 === text2) {
+        output = '<p style="color: #155724;">Both texts are identical!</p>';
+      }
+
+      document.getElementById('diff-output').innerHTML = output;
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('stats').style.display = 'grid';
+      document.getElementById('added-count').textContent = added;
+      document.getElementById('removed-count').textContent = removed;
+      document.getElementById('unchanged-count').textContent = unchanged;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function clearAll() {
+      document.getElementById('text1').value = '';
+      document.getElementById('text2').value = '';
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('stats').style.display = 'none';
+    }
+
+    function swapTexts() {
+      const text1 = document.getElementById('text1').value;
+      const text2 = document.getElementById('text2').value;
+      document.getElementById('text1').value = text2;
+      document.getElementById('text2').value = text1;
+    }
+  </script>
+</body>
+</html>

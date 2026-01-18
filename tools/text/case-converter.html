@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Converter - Change Text Case Online Free</title>
+  <meta name="description" content="Free online case converter. Convert text to uppercase, lowercase, title case, sentence case, and more. Instant text transformation.">
+  <meta name="keywords" content="case converter, uppercase, lowercase, title case, sentence case, text transformer">
+  <link rel="canonical" href="https://freetoolbox.com/tools/text/case-converter.html">
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <a href="/" class="logo">Free<span>ToolBox</span></a>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="tool-page">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Home</a> &rsaquo; <a href="/">Text Tools</a> &rsaquo; Case Converter
+      </div>
+
+      <div class="tool-header">
+        <h1>Case Converter</h1>
+        <p>Transform your text between different cases instantly. Perfect for formatting titles, code, and documents.</p>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container">
+        <div class="input-group">
+          <label for="text-input">Enter your text:</label>
+          <textarea id="text-input" placeholder="Type or paste your text here..."></textarea>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn" onclick="convert('upper')">UPPERCASE</button>
+          <button class="btn" onclick="convert('lower')">lowercase</button>
+          <button class="btn" onclick="convert('title')">Title Case</button>
+          <button class="btn" onclick="convert('sentence')">Sentence case</button>
+          <button class="btn" onclick="convert('camel')">camelCase</button>
+          <button class="btn" onclick="convert('pascal')">PascalCase</button>
+          <button class="btn" onclick="convert('snake')">snake_case</button>
+          <button class="btn" onclick="convert('kebab')">kebab-case</button>
+          <button class="btn" onclick="convert('alternate')">aLtErNaTe</button>
+          <button class="btn" onclick="convert('inverse')">iNVERSE</button>
+        </div>
+
+        <div class="result-box" style="margin-top: 20px;">
+          <div class="result-label">Result:</div>
+          <div id="result" style="min-height: 50px;"></div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 16px;">
+          <button class="btn copy-btn" onclick="copyResult()">Copy Result</button>
+          <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+        </div>
+      </div>
+
+      <div class="ad-container horizontal">
+        <p>Advertisement</p>
+      </div>
+
+      <div class="tool-container" style="margin-top: 40px;">
+        <h2>Available Conversions</h2>
+        <ul style="margin: 16px 0; padding-left: 20px;">
+          <li><strong>UPPERCASE:</strong> ALL LETTERS BECOME CAPITAL</li>
+          <li><strong>lowercase:</strong> all letters become small</li>
+          <li><strong>Title Case:</strong> First Letter Of Each Word Capitalized</li>
+          <li><strong>Sentence case:</strong> First letter of each sentence capitalized</li>
+          <li><strong>camelCase:</strong> firstWordLower, subsequentWordsCapped (for programming)</li>
+          <li><strong>PascalCase:</strong> EveryWordStartsCapital (for programming)</li>
+          <li><strong>snake_case:</strong> words_separated_by_underscores</li>
+          <li><strong>kebab-case:</strong> words-separated-by-hyphens</li>
+          <li><strong>aLtErNaTe:</strong> alternating lowercase and uppercase</li>
+          <li><strong>iNVERSE:</strong> swap uppercase and lowercase</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 FreeToolBox. Free tools for everyone.</p>
+        <div class="footer-links">
+          <a href="/about.html">About</a>
+          <a href="/privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function convert(type) {
+      const text = document.getElementById('text-input').value;
+      let result = '';
+
+      switch(type) {
+        case 'upper':
+          result = text.toUpperCase();
+          break;
+        case 'lower':
+          result = text.toLowerCase();
+          break;
+        case 'title':
+          result = text.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+          break;
+        case 'sentence':
+          result = text.toLowerCase().replace(/(^\w|[.!?]\s+\w)/g, c => c.toUpperCase());
+          break;
+        case 'camel':
+          result = text.toLowerCase()
+            .replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase());
+          break;
+        case 'pascal':
+          result = text.toLowerCase()
+            .replace(/(?:^|[^a-zA-Z0-9]+)(.)/g, (_, c) => c.toUpperCase());
+          break;
+        case 'snake':
+          result = text.toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/[^a-zA-Z0-9_]/g, '');
+          break;
+        case 'kebab':
+          result = text.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-zA-Z0-9-]/g, '');
+          break;
+        case 'alternate':
+          result = text.split('').map((c, i) =>
+            i % 2 === 0 ? c.toLowerCase() : c.toUpperCase()
+          ).join('');
+          break;
+        case 'inverse':
+          result = text.split('').map(c =>
+            c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()
+          ).join('');
+          break;
+      }
+
+      document.getElementById('result').textContent = result;
+    }
+
+    function copyResult() {
+      const result = document.getElementById('result').textContent;
+      navigator.clipboard.writeText(result);
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Result';
+        btn.classList.remove('copied');
+      }, 2000);
+    }
+
+    function clearAll() {
+      document.getElementById('text-input').value = '';
+      document.getElementById('result').textContent = '';
+    }
+  </script>
+</body>
+</html>
